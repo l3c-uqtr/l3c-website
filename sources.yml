@@ -1,11 +1,12 @@
 # Configuration du site L3C.
 # Les fichiers ci-dessous restent sur l'ordinateur : ils ne sont JAMAIS copiés dans le dépôt GitHub.
 # Seuls les champs listés dans scripts/build_data.R sont exportés vers le site.
+# Les chemins sont relatifs au dossier du projet (0-QuantifiedSelf/02_Websites/l3c-website).
 
 sources:
-  cvdata: "C:/Users/gvall/SynologyDrive/Pro/3-Resources/0-QuantifiedSelf/CVdata.xlsx"
-  publications: "C:/Users/gvall/SynologyDrive/Pro/3-Resources/0-QuantifiedSelf/01_CV/MyPublications/myarticles.bib"
-  conferences: "C:/Users/gvall/SynologyDrive/Pro/3-Resources/0-QuantifiedSelf/01_CV/MyPublications/confs.bib"
+  cvdata: "../../CVdata.xlsx"
+  publications: "../../01_CV/MyPublications/myarticles.bib"
+  conferences: "../../01_CV/MyPublications/confs.bib"
 
 # Afficher le montant des subventions sur la page Projets ?
 afficher_montants: false

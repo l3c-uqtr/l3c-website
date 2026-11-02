@@ -39,7 +39,8 @@ $degrade: linear-gradient(90deg, $l3c-or, $l3c-ambre 35%, $l3c-orange 70%, $l3c-
 .navbar-brand img, .navbar-logo {
   max-height: 44px;
 }
-.navbar .nav-link {
+.navbar .nav-link, .navbar .menu-text {
+  white-space: nowrap;
   font-weight: 600;
 }
 
@@ -340,7 +341,28 @@ th[aria-sort="descending"] .tri-bouton::after { content: " ↓"; color: $l3c-rou
   font-weight: 600;
 }
 
+/* --- Formulaire de participation --- */
+
+.formulaire {
+  margin: 1.5rem 0;
+  padding: 1.2rem 1.4rem;
+  background: $l3c-creme;
+  border: 1px solid $l3c-sable;
+  border-radius: 10px;
+  .form-label { font-weight: 600; margin-bottom: .2rem; }
+  .form-check { margin: 1rem 0; }
+  .form-text { color: #6E5A4C; }
+}
+.form-grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.champ-cache { position: absolute; left: -9999px; }
+
 @media (max-width: 767.98px) {
+  .form-grille { grid-template-columns: minmax(0, 1fr); }
   .hero, .cv-colonnes, .themes, .direction { grid-template-columns: minmax(0, 1fr); }
   .hero-logo { order: -1; }
   .hero img { max-height: 220px; }

@@ -9,3 +9,9 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Le lien CV du menu télécharge le fichier au lieu de l'ouvrir
+[[headers]]
+  for = "/files/GVallet_CV.pdf"
+  [headers.values]
+    Content-Disposition = "attachment; filename=\"GVallet_CV.pdf\""

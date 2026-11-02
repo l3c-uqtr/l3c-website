@@ -13,6 +13,11 @@ if not exist "%QUARTO%" (
 for /d %%d in ("C:\Program Files\R\R-*") do set "PATH=%PATH%;%%d\bin"
 
 echo.
+echo === Copie du CV ===
+copy /Y "..\..\01_CV\GVallet_Vitae\docs\GVallet_CV.pdf" "files\GVallet_CV.pdf"
+if errorlevel 1 goto erreur
+
+echo.
 echo === Compilation du site ===
 "%QUARTO%" render
 if errorlevel 1 goto erreur

@@ -1,0 +1,9 @@
+---
+title: "Merci !"
+subtitle: "Votre demande a bien été envoyée"
+search: false
+---
+
+Nous vous contacterons lorsqu'une étude pourra vous convenir. Pour toute question, écrivez-nous à [l3c@uqtr.ca](mailto:l3c@uqtr.ca).
+
+[Retour à l'accueil →](index.qmd){.lien-suite}

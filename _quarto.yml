@@ -6,6 +6,8 @@ project:
   render:
     - "*.qmd"
     - "!README.md"
+  resources:
+    - files/GVallet_CV.pdf
 
 lang: fr
 
@@ -27,6 +29,7 @@ website:
     logo: files/images/logo-l3c.png
     logo-alt: "Logo du L3C"
     title: false
+    collapse-below: xl
     left:
       - text: Le laboratoire
         href: index.qmd
@@ -40,6 +43,13 @@ website:
         href: projets.qmd
       - text: Cours
         href: cours.qmd
+      - text: Participer
+        href: participer.qmd
+    right:
+      - text: CV
+        icon: file-earmark-arrow-down
+        href: files/GVallet_CV.pdf
+        aria-label: "Télécharger le CV de Guillaume T. Vallet"
 
   page-footer:
     left: "© L3C · Laboratoire Cognition-Corps-Contexte · [UQTR](https://www.uqtr.ca)"

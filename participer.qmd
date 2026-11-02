@@ -1,0 +1,68 @@
+---
+title: "Participer"
+subtitle: "Prendre part aux projets du laboratoire"
+---
+
+Nos recherches reposent sur la participation de personnes de tous âges. Si vous souhaitez contribuer aux projets du L3C, laissez-nous vos coordonnées : nous vous contacterons lorsqu'une étude pourra vous convenir.
+
+Remplir ce formulaire ne vous engage à rien. Vous recevrez toutes les informations sur une étude avant de décider d'y participer, et vous pourrez changer d'avis à tout moment.
+
+```{=html}
+<form class="formulaire" name="participation" method="POST" action="/merci.html" data-netlify="true" netlify-honeypot="site-web">
+  <input type="hidden" name="form-name" value="participation">
+  <p class="champ-cache"><label>Ne pas remplir ce champ <input name="site-web" tabindex="-1" autocomplete="off"></label></p>
+
+  <div class="form-grille">
+    <div>
+      <label class="form-label" for="prenom">Prénom *</label>
+      <input class="form-control" id="prenom" name="prenom" autocomplete="given-name" required>
+    </div>
+    <div>
+      <label class="form-label" for="nom">Nom *</label>
+      <input class="form-control" id="nom" name="nom" autocomplete="family-name" required>
+    </div>
+    <div>
+      <label class="form-label" for="courriel">Courriel *</label>
+      <input class="form-control" id="courriel" type="email" name="courriel" autocomplete="email" required>
+    </div>
+    <div>
+      <label class="form-label" for="telephone">Téléphone (facultatif)</label>
+      <input class="form-control" id="telephone" type="tel" name="telephone" autocomplete="tel">
+    </div>
+    <div>
+      <label class="form-label" for="age">Tranche d'âge *</label>
+      <select class="form-select" id="age" name="tranche-age" required>
+        <option value="">Choisir…</option>
+        <option>18 à 39 ans</option>
+        <option>40 à 59 ans</option>
+        <option>60 à 74 ans</option>
+        <option>75 ans et plus</option>
+      </select>
+    </div>
+    <div>
+      <label class="form-label" for="modalite">Participation souhaitée *</label>
+      <select class="form-select" id="modalite" name="modalite" required>
+        <option value="">Choisir…</option>
+        <option>En personne à Trois-Rivières</option>
+        <option>En ligne</option>
+        <option>En personne ou en ligne</option>
+      </select>
+    </div>
+  </div>
+
+  <label class="form-label" for="message">Message (facultatif)</label>
+  <textarea class="form-control" id="message" name="message" rows="4" aria-describedby="message-aide"></textarea>
+  <p class="form-text" id="message-aide">Disponibilités, questions… Merci de ne pas inscrire d'information sur votre santé.</p>
+
+  <div class="form-check">
+    <input class="form-check-input" id="accord" type="checkbox" name="accord" value="oui" required>
+    <label class="form-check-label" for="accord">J'accepte que le L3C conserve ces renseignements pour me contacter au sujet de ses études. *</label>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Envoyer</button>
+</form>
+```
+
+::: {.legende}
+Vos renseignements servent uniquement à vous contacter pour les études du laboratoire. Ils sont transmis par la plateforme d'hébergement du site, Netlify, dont les serveurs peuvent se trouver à l'extérieur du Québec. Pour les consulter, les corriger ou les faire supprimer, écrivez à [l3c@uqtr.ca](mailto:l3c@uqtr.ca).
+:::
