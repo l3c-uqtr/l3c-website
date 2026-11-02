@@ -21,13 +21,9 @@ echo.
 echo === Envoi sur GitHub ===
 git add -A
 git diff --cached --quiet
-if not errorlevel 1 (
-  echo Aucun changement a publier.
-  goto fin
-)
-git commit -m "Mise a jour du site"
+if errorlevel 1 git commit -m "Mise a jour du site"
 if errorlevel 1 goto erreur
-git push
+git push -u origin main
 if errorlevel 1 goto erreur
 
 echo.
