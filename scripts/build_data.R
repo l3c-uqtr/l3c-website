@@ -243,21 +243,27 @@ cache_resumes <- if (file.exists(fichier_cache)) {
   fromJSON(fichier_cache, simplifyVector = FALSE)
 } else list()
 
+decoder_entites <- function(t) {
+  repeat {
+    avant <- t
+    t <- gsub("&amp;", "&", t, fixed = TRUE)
+    if (identical(t, avant)) break
+  }
+  gsub("&gt;", ">", gsub("&lt;", "<", t, fixed = TRUE), fixed = TRUE)
+}
+
 resume_doi <- function(doi) {
   if (is.na(doi)) return(NA_character_)
   if (doi %in% names(cache_resumes)) {
     v <- cache_resumes[[doi]]
-    return(if (is.null(v)) NA_character_ else v)
+    return(if (is.null(v)) NA_character_ else decoder_entites(v))
   }
   options(timeout = 8)
   url <- paste0("https://api.crossref.org/works/", URLencode(doi, reserved = TRUE))
   rep <- tryCatch(fromJSON(url), error = function(e) NULL)
   if (is.null(rep)) return(NA_character_)
   brut <- rep$message$abstract
-  texte <- if (is.null(brut)) NA_character_ else {
-    t <- propre(gsub("<[^>]+>", " ", brut))
-    gsub("&amp;", "&", gsub("&gt;", ">", gsub("&lt;", "<", t, fixed = TRUE), fixed = TRUE), fixed = TRUE)
-  }
+  texte <- if (is.null(brut)) NA_character_ else decoder_entites(propre(gsub("<[^>]+>", " ", brut)))
   cache_resumes[doi] <<- list(texte)
   Sys.sleep(0.2)
   texte
