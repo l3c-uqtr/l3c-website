@@ -1,6 +1,8 @@
 ---
 title: "Équipe"
 subtitle: "Les personnes qui font vivre le laboratoire"
+include-after-body:
+  text: <script src="files/tableaux.js"></script>
 ---
 
 ## Direction

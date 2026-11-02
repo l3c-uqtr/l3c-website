@@ -287,6 +287,12 @@ puces_filtre <- function(titre, classe, valeurs) {
           classe, titre, paste(puces, collapse = ""))
 }
 
+tableau_synthese <- function(colonnes, numeriques, lignes) {
+  entetes <- sprintf("<th%s>%s</th>", ifelse(numeriques, " data-tri=\"num\"", ""), colonnes)
+  c("<div class=\"table-responsive\"><table class=\"table table-synthese tableau-tri\" data-lignes=\"10\">",
+    "<thead><tr>", entetes, "</tr></thead><tbody>", lignes, "</tbody></table></div>")
+}
+
 liste_filtrable <- function(items, id, indice) {
   annees <- sort(unique(vapply(items, function(x) x$annee, 0L)), decreasing = TRUE)
   options_annee <- paste(sprintf("<option value=\"%d\">%d</option>", annees, annees), collapse = "")
@@ -420,7 +426,7 @@ corriger_nom <- function(nom, prenom) {
 }
 
 sup <- read_excel(cfg$sources$cvdata, sheet = "supervision", col_types = "text")
-sup <- sup[, c("lastname", "firstname", "univ", "prog", "level", "date_start", "date_end", "cosupervision", "project", "photo")]
+sup <- sup[, c("lastname", "firstname", "univ", "prog", "level", "status", "date_start", "date_end", "cosupervision", "project", "photo")]
 sup <- sup[!is.na(sup$lastname) & !is.na(sup$firstname), ]
 
 ass <- read_excel(cfg$sources$cvdata, sheet = "assistanat", col_types = "text")
@@ -430,10 +436,10 @@ ass <- ass[!is.na(ass$lastname) & !is.na(ass$firstname) & grepl("recherche", ass
 personnes <- rbind(
   data.frame(nom = sup$lastname, prenom = sup$firstname, univ = sup$univ, prog = sup$prog, niveau = sup$level,
              debut = mmaaaa(sup$date_start), fin = mmaaaa(sup$date_end), codir = sup$cosupervision,
-             projet = sup$project, photo = sup$photo),
+             projet = sup$project, photo = sup$photo, role = paste0(sup$status, " (", sup$level, ")")),
   data.frame(nom = ass$lastname, prenom = ass$firstname, univ = ass$univ, prog = ass$status, niveau = "Assistanat",
              debut = saison(ass$date_start, FALSE), fin = saison(ass$date_end, TRUE), codir = NA_character_,
-             projet = NA_character_, photo = NA_character_)
+             projet = NA_character_, photo = NA_character_, role = paste0(ass$status, " (", ass$level, ")"))
 )
 noms <- t(mapply(corriger_nom, personnes$nom, personnes$prenom, USE.NAMES = FALSE))
 personnes$nom <- noms[, 1]
@@ -491,17 +497,14 @@ ecrire("equipe.md", html_equipe)
 
 anciens <- membres[!membres$actif, ]
 anciens <- anciens[order(-anciens$jusqu, cle_tri(anciens$nom)), ]
-ligne_ancien <- vapply(seq_len(nrow(anciens)), function(i) {
-  m <- anciens[i, ]
-  periode <- if (is.finite(m$depuis) && m$depuis != m$jusqu) paste0(m$depuis, "–", m$jusqu) else as.character(m$jusqu)
-  projet <- if (!is.na(m$projet)) sprintf("<br><small>%s</small>", esc(propre(m$projet))) else ""
-  sprintf("<tr><td>%s %s</td><td>%s%s</td><td>%s</td><td>%s</td></tr>",
-          esc(m$prenom), esc(m$nom), esc(m$prog), projet, esc(m$univ %||% ""), periode)
-}, "")
-ecrire("alumni.md", c(
-  "<div class=\"table-responsive\"><table class=\"table table-alumni\">",
-  "<thead><tr><th>Nom</th><th>Formation</th><th>Université</th><th>Période</th></tr></thead><tbody>",
-  ligne_ancien, "</tbody></table></div>"
+ecrire("alumni.md", tableau_synthese(
+  c("Membres", "Rôle", "Début", "Fin"), c(FALSE, FALSE, TRUE, TRUE),
+  vapply(seq_len(nrow(anciens)), function(i) {
+    m <- anciens[i, ]
+    debut <- if (is.finite(m$depuis)) m$depuis else ""
+    sprintf("<tr><td>%s, %s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+            esc(toupper(m$nom)), esc(m$prenom), esc(m$role), debut, m$jusqu)
+  }, "")
 ))
 
 # Direction du laboratoire
@@ -536,6 +539,10 @@ sub$fin <- mapply(fin_projet, ifelse(is.na(sub$when), "", sub$when), sub$year)
 # Sans date de fin connue, un projet est considéré en cours pendant trois ans
 sub$fin[is.na(sub$fin)] <- (as.integer(sub$year[is.na(sub$fin)]) + 3L) * 100L + 12L
 sub$en_cours <- sub$fin >= aujourd_hui
+sub$annee_debut <- mapply(function(when, annee) {
+  m <- regmatches(when, regexpr("[0-9]{4}", when))
+  if (length(m)) m else annee
+}, ifelse(is.na(sub$when), "", sub$when), sub$year, USE.NAMES = FALSE)
 sub <- sub[order(-as.integer(sub$year), sub$type != "pi", cle_tri(sub$title)), ]
 
 carte_projet <- function(p) {
@@ -559,7 +566,17 @@ cartes_projets <- function(d) {
   c("<div class=\"grille-projets\">", vapply(seq_len(nrow(d)), function(i) carte_projet(d[i, ]), ""), "</div>")
 }
 ecrire("projets-en-cours.md", cartes_projets(sub[sub$en_cours, ]))
-ecrire("projets-termines.md", cartes_projets(sub[!sub$en_cours, ]))
+termines <- sub[!sub$en_cours, ]
+termines <- termines[order(-(termines$fin %/% 100L), cle_tri(termines$title)), ]
+ecrire("projets-termines.md", tableau_synthese(
+  c("Projet", "Financement", "Responsable", "Début", "Fin"), c(FALSE, FALSE, FALSE, TRUE, TRUE),
+  vapply(seq_len(nrow(termines)), function(i) {
+    p <- termines[i, ]
+    sprintf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%d</td></tr>",
+            esc(propre(p$title)), esc(propre(p$orga)),
+            esc(propre(strsplit(p$resp %||% "", "\n", fixed = TRUE)[[1]][1])), esc(p$annee_debut), p$fin %/% 100L)
+  }, "")
+))
 
 # --- Cours -----------------------------------------------------------------------------
 

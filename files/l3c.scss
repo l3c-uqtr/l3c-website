@@ -276,10 +276,31 @@ h3 { color: $l3c-rouille; }
   font-size: 1.3rem;
   font-weight: 600;
 }
-.table-alumni {
+.table-synthese {
   font-size: .92rem;
-  small { color: #6E5A4C; }
-  th { color: $l3c-brun; }
+  th { color: $l3c-brun; white-space: nowrap; }
+  th[data-tri="num"], td:nth-last-child(-n+2) { white-space: nowrap; }
+}
+.tri-bouton {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font-weight: 600;
+  &::after { content: " ↕"; color: $l3c-ambre; }
+}
+th[aria-sort="ascending"] .tri-bouton::after { content: " ↑"; color: $l3c-rouille; }
+th[aria-sort="descending"] .tri-bouton::after { content: " ↓"; color: $l3c-rouille; }
+.tableau-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  justify-content: flex-end;
+  color: #6E5A4C;
+  font-size: .88rem;
+  &[hidden] { display: none; }
+  span { margin-right: auto; }
 }
 
 /* --- Projets et cours --- */

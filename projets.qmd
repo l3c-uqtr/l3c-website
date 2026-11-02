@@ -1,6 +1,8 @@
 ---
 title: "Projets"
 subtitle: "Projets de recherche financés"
+include-after-body:
+  text: <script src="files/tableaux.js"></script>
 ---
 
 ## Projets en cours
