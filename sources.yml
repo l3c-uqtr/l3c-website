@@ -1,0 +1,60 @@
+# Configuration du site L3C.
+# Les fichiers ci-dessous restent sur l'ordinateur : ils ne sont JAMAIS copiés dans le dépôt GitHub.
+# Seuls les champs listés dans scripts/build_data.R sont exportés vers le site.
+
+sources:
+  cvdata: "C:/Users/gvall/SynologyDrive/Pro/3-Resources/0-QuantifiedSelf/CVdata.xlsx"
+  publications: "C:/Users/gvall/SynologyDrive/Pro/3-Resources/0-QuantifiedSelf/01_CV/MyPublications/myarticles.bib"
+  conferences: "C:/Users/gvall/SynologyDrive/Pro/3-Resources/0-QuantifiedSelf/01_CV/MyPublications/confs.bib"
+
+# Afficher le montant des subventions sur la page Projets ?
+afficher_montants: false
+
+# Corrections d'affichage, sans modifier CVdata : "Nom, Prénom dans le fichier": "Nom, Prénom à afficher"
+corrections_noms:
+  "Jacob, Martin": "Martin, Jacob"
+
+# Traduction des champs field/spe des .bib en mots-clés affichés (la casse est ignorée).
+# Mettre ~ pour ne pas afficher un mot-clé. Un mot absent de cette liste est affiché tel quel.
+mots_cles:
+  Neuropsy: Neuropsychologie
+  Neuopsy: Neuropsychologie
+  Npsy: Neuropsychologie
+  Neuro: Neuropsychologie
+  Cognition: Psychologie cognitive
+  Cognitive: Psychologie cognitive
+  Cog: Psychologie cognitive
+  Fondamental: Psychologie cognitive
+  Vx: Vieillissement
+  Aging: Vieillissement
+  Memory: Mémoire
+  Embodied cognition: Cognition incarnée
+  Health: Santé
+  HRV: Variabilité cardiaque
+  Audio: Audiologie
+  Audiology: Audiologie
+  Perception: Perception
+  Assessment: Évaluation
+  Alzheimer: Maladie d'Alzheimer
+  Retraite: Retraite
+  Retirement: Retraite
+  Clinique: Clinique
+  Psychophysio: Psychophysiologie
+  Executive function: Fonctions exécutives
+  Ageism: Âgisme
+  dentaire: Santé bucco-dentaire
+  Oral health: Santé bucco-dentaire
+  Tinnitus: Acouphènes
+  Hyperacusis: Hyperacousie
+  Sedentarity: Sédentarité
+  Psychometrics: Psychométrie
+  MCI: Trouble cognitif léger
+  SCD: Déclin cognitif subjectif
+  Benzodiazepine: Benzodiazépines
+  Multitasking: Multitâche
+  Imagery: Imagerie mentale
+  Imagerie: Imagerie mentale
+  Emotion: Émotions
+  Decision making: Prise de décision
+  Psycho: ~
+  Prog: ~

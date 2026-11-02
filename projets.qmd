@@ -1,0 +1,12 @@
+---
+title: "Projets"
+subtitle: "Projets de recherche financés"
+---
+
+## Projets en cours
+
+{{< include _generated/projets-en-cours.md >}}
+
+## Projets terminés
+
+{{< include _generated/projets-termines.md >}}

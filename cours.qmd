@@ -1,0 +1,16 @@
+---
+title: "Cours"
+subtitle: "Enseignement à l'Université du Québec à Trois-Rivières"
+---
+
+## Cours actuels
+
+{{< include _generated/cours-actuels.md >}}
+
+## Cours donnés par le passé
+
+{{< include _generated/cours-passes.md >}}
+
+## Expérience d'enseignement antérieure
+
+{{< include _generated/cours-experience.md >}}

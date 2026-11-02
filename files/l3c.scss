@@ -1,0 +1,330 @@
+/*-- scss:defaults --*/
+
+// Couleurs relevées sur le logo du L3C
+$l3c-or: #F9D36B;
+$l3c-ambre: #F6B04B;
+$l3c-orange: #F2822F;
+$l3c-rouille: #B4531F;
+$l3c-brun: #5A3A28;
+$l3c-creme: #FFF8EC;
+$l3c-sable: #F3E4CF;
+
+$primary: $l3c-rouille;
+$secondary: $l3c-brun;
+$body-color: #33261D;
+$body-bg: #FFFDF9;
+$link-color: $l3c-rouille;
+$link-hover-color: #8E3F15;
+$navbar-bg: #FFFFFF;
+$navbar-fg: $l3c-brun;
+$navbar-hl: $l3c-rouille;
+$footer-bg: $l3c-creme;
+$footer-fg: $l3c-brun;
+
+$font-family-sans-serif: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+$headings-font-family: "EB Garamond", Georgia, serif;
+$headings-font-weight: 600;
+$headings-color: $l3c-brun;
+$font-size-root: 17px;
+
+/*-- scss:rules --*/
+
+$degrade: linear-gradient(90deg, $l3c-or, $l3c-ambre 35%, $l3c-orange 70%, $l3c-rouille);
+
+.navbar {
+  border-bottom: 3px solid transparent;
+  border-image: $degrade 1;
+  box-shadow: none;
+}
+.navbar-brand img, .navbar-logo {
+  max-height: 44px;
+}
+.navbar .nav-link {
+  font-weight: 600;
+}
+
+.quarto-title h1.title, #title-block-header h1 {
+  font-size: 2.6rem;
+}
+.quarto-title .subtitle {
+  color: $l3c-rouille;
+  font-family: $headings-font-family;
+  font-size: 1.3rem;
+}
+
+main h2, .content h2 {
+  margin-top: 2.5rem;
+  padding-bottom: .3rem;
+  border-bottom: 0;
+  background: $degrade bottom left / 72px 3px no-repeat;
+}
+h3 { color: $l3c-rouille; }
+
+/* --- Accueil --- */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 1080px;
+  margin: 1.5rem auto 2rem;
+  h1 {
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    line-height: 1.1;
+    margin: .3rem 0 1rem;
+  }
+  p { font-size: 1.15rem; }
+  img { max-height: 340px; width: auto; max-width: 100%; display: block; margin: 0 auto; }
+  figure { margin: 0; }
+}
+.hero-surtitre {
+  color: $l3c-rouille;
+  font-size: .95rem !important;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.chiffres {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 1080px;
+  margin: 0 auto 1rem;
+}
+.chiffre {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.2rem;
+  background: $l3c-creme;
+  border: 1px solid $l3c-sable;
+  border-radius: 10px;
+  color: $l3c-brun;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: border-color .15s ease;
+  &:hover { border-color: $l3c-orange; color: $l3c-brun; }
+}
+.chiffre-n {
+  color: $l3c-rouille;
+  font-family: $headings-font-family;
+  font-size: 2.3rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.accueil {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.themes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.theme {
+  padding: 1rem 1.2rem;
+  border-left: 3px solid $l3c-ambre;
+  background: #fff;
+  h4 { color: $l3c-rouille; margin-top: 0; }
+  p { margin: 0; }
+}
+.lien-suite { font-weight: 600; }
+
+/* --- Filtres --- */
+
+.filtres {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.2rem;
+  background: $l3c-creme;
+  border: 1px solid $l3c-sable;
+  border-radius: 10px;
+}
+.f-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: .8rem;
+}
+.f-texte { flex: 1 1 240px; width: auto; }
+.f-annee { flex: 0 1 200px; width: auto; }
+.f-groupe {
+  margin-bottom: .6rem;
+  legend {
+    color: $l3c-brun;
+    float: none;
+    font-size: .85rem;
+    font-weight: 600;
+    margin-bottom: .25rem;
+  }
+}
+.puce {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  margin: 0 .3rem .3rem 0;
+  padding: .12rem .6rem;
+  background: #fff;
+  border: 1px solid $l3c-ambre;
+  border-radius: 999px;
+  color: $l3c-brun;
+  cursor: pointer;
+  font-size: .85rem;
+  user-select: none;
+  input { position: absolute; opacity: 0; width: 0; height: 0; }
+  &:focus-within { outline: 2px solid $l3c-rouille; outline-offset: 1px; }
+  &.actif { background: $l3c-rouille; border-color: $l3c-rouille; color: #fff; }
+  &.actif .puce-n { color: #fff; }
+}
+.puce-n { color: #8A6F5C; font-size: .78rem; }
+.f-compte { margin: .3rem 0 0; color: $l3c-rouille; font-weight: 600; font-size: .9rem; }
+
+/* --- Références --- */
+
+.item {
+  padding: .8rem 0 .9rem 1rem;
+  border-left: 3px solid $l3c-sable;
+  margin-bottom: .9rem;
+  transition: border-color .15s ease;
+  &:hover { border-left-color: $l3c-orange; }
+  p { margin: 0 0 .15rem; }
+}
+.item[hidden], .annee[hidden] { display: none; }
+.item-titre { font-weight: 600; color: $l3c-brun; font-size: 1.04rem; }
+.item-auteurs, .item-lieu { font-size: .95rem; }
+.item-meta { margin-top: .35rem; display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+.etq {
+  padding: .05rem .5rem;
+  background: $l3c-creme;
+  border-radius: 4px;
+  color: $l3c-brun;
+  font-size: .78rem;
+}
+.etq-type { background: $l3c-rouille; color: #fff; }
+.lien-doi { font-size: .85rem; font-weight: 600; margin-left: .2rem; }
+.item-resume {
+  margin-top: .3rem;
+  font-size: .92rem;
+  summary { color: $l3c-rouille; cursor: pointer; font-weight: 600; }
+  p { margin-top: .4rem; padding: .6rem .8rem; background: $l3c-creme; border-radius: 6px; }
+}
+.legende { color: #6E5A4C; font-size: .88rem; margin-top: 1.5rem; }
+
+/* --- Équipe --- */
+
+.direction {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 1.8rem;
+  align-items: start;
+  margin-bottom: 1rem;
+  img { width: 200px; border-radius: 12px; }
+  h3 { margin-top: 0; }
+  figure, p:has(img) { margin: 0; }
+}
+.lien-profil { margin-right: 1rem; font-weight: 600; white-space: nowrap; }
+.cv-colonnes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  h3 { font-size: 1.2rem; }
+}
+.cv-liste {
+  list-style: none;
+  padding: 0;
+  li { margin-bottom: .5rem; font-size: .95rem; }
+}
+.cv-date { color: #6E5A4C; white-space: nowrap; }
+
+.grille-membres {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.membre {
+  display: flex;
+  gap: .9rem;
+  padding: .9rem;
+  background: #fff;
+  border: 1px solid $l3c-sable;
+  border-radius: 10px;
+  h4 { font-size: 1.15rem; margin: 0 0 .15rem; }
+  p { margin: 0 0 .1rem; }
+  details { margin-top: .25rem; font-size: .88rem; }
+  summary { color: $l3c-rouille; cursor: pointer; font-weight: 600; }
+}
+.membre-corps { min-width: 0; }
+.membre-prog { font-size: .9rem; }
+.membre-info { color: #6E5A4C; font-size: .85rem; }
+.avatar {
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.avatar-initiales {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $l3c-or, $l3c-orange);
+  color: $l3c-brun;
+  font-family: $headings-font-family;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.table-alumni {
+  font-size: .92rem;
+  small { color: #6E5A4C; }
+  th { color: $l3c-brun; }
+}
+
+/* --- Projets et cours --- */
+
+.grille-projets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1rem;
+}
+.projet {
+  padding: 1rem 1.2rem;
+  background: #fff;
+  border: 1px solid $l3c-sable;
+  border-top: 3px solid $l3c-ambre;
+  border-radius: 8px;
+  h3 { color: $l3c-brun; font-size: 1.22rem; line-height: 1.25; margin: .5rem 0; }
+}
+.projet-tete { display: flex; justify-content: space-between; gap: .5rem; align-items: center; }
+.projet-date { color: #6E5A4C; font-size: .85rem; }
+.projet-info { font-size: .9rem; margin-bottom: .25rem; }
+
+.liste-cours { display: grid; gap: .7rem; }
+.cours {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: .7rem 1rem;
+  background: #fff;
+  border: 1px solid $l3c-sable;
+  border-radius: 8px;
+  h4 { font-size: 1.15rem; margin: 0; }
+  p { margin: 0; color: #6E5A4C; font-size: .9rem; }
+}
+.cours-sigle {
+  flex: 0 0 92px;
+  color: $l3c-rouille;
+  font-weight: 600;
+}
+
+@media (max-width: 767.98px) {
+  .hero, .cv-colonnes, .themes, .direction { grid-template-columns: minmax(0, 1fr); }
+  .hero-logo { order: -1; }
+  .hero img { max-height: 220px; }
+  .chiffres { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grille-projets, .grille-membres { grid-template-columns: minmax(0, 1fr); }
+  .cours { align-items: flex-start; flex-direction: column; gap: .2rem; }
+  .cours-sigle { flex-basis: auto; }
+}

@@ -1,0 +1,15 @@
+/.quarto/
+**/*.quarto_ipynb
+
+# Données sources : ne jamais les publier
+*.xlsx
+*.xls
+*.ods
+*.bib
+
+# Fichiers de travail locaux
+/_archive/
+/.claude/
+/.Rproj.user/
+.Rhistory
+.RData

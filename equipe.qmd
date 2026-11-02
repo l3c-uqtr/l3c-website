@@ -1,0 +1,30 @@
+---
+title: "Équipe"
+subtitle: "Les personnes qui font vivre le laboratoire"
+---
+
+## Direction
+
+::: {.direction}
+![](files/profiles/GVallet_Photo.jpg){.direction-photo fig-alt="Photo de Guillaume T. Vallet"}
+
+::: {.direction-texte}
+### Guillaume T. Vallet, Ph.D.
+
+Guillaume Vallet est professeur adjoint en neuropsychologie à l'Université du Québec à Trois-Rivières (UQTR). Psychologue spécialisé en neuropsychologie, il a poursuivi des études doctorales en cotutelle entre la France (Université Lyon 2) et le Canada (Université Laval), alliant psychologie cognitive et neuropsychologie. Il a effectué un postdoctorat au Centre de recherche de l'Institut universitaire de gériatrie de Montréal, où il est maintenant chercheur régulier.
+
+Ses travaux mettent en avant les liens entre le corps, le contexte et la cognition. Ses principales thématiques portent sur la mémoire humaine et le vieillissement cognitif, auprès d'adultes en santé ou présentant des troubles cognitifs. Il s'intéresse également à l'adaptation cardiovasculaire comme marqueur du fonctionnement cognitif et levier d'intervention non pharmaceutique.
+
+[{{< ai orcid >}} ORCID](https://orcid.org/0000-0002-9816-3267){.lien-profil} [{{< ai google-scholar >}} Google Scholar](https://scholar.google.com/citations?user=gfKFo3MAAAAJ&hl=fr){.lien-profil} [{{< ai researchgate >}} ResearchGate](https://www.researchgate.net/profile/Guillaume_Vallet){.lien-profil}
+:::
+:::
+
+{{< include _generated/direction.md >}}
+
+## Équipe actuelle
+
+{{< include _generated/equipe.md >}}
+
+## Ancienne équipe
+
+{{< include _generated/alumni.md >}}

@@ -1,0 +1,11 @@
+# Le site est compilé sur l'ordinateur (Mettre_a_jour_le_site.bat) :
+# Netlify publie simplement le dossier docs/ à chaque envoi sur GitHub.
+[build]
+  publish = "docs"
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

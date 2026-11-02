@@ -1,0 +1,59 @@
+project:
+  type: website
+  output-dir: docs
+  pre-render: scripts/build_data.R
+  post-render: scripts/verifier_confidentialite.R
+  render:
+    - "*.qmd"
+    - "!README.md"
+
+lang: fr
+
+website:
+  title: "L3C"
+  description: "Laboratoire Cognition-Corps-Contexte de l'Université du Québec à Trois-Rivières, dirigé par Guillaume T. Vallet."
+  site-url: "https://l3c-uqtr.netlify.app"
+  favicon: files/images/favicon.png
+  image: files/images/logo-l3c-complet.png
+  open-graph: true
+  page-navigation: false
+  back-to-top-navigation: true
+  search:
+    location: navbar
+    type: textbox
+
+  navbar:
+    background: light
+    logo: files/images/logo-l3c.png
+    logo-alt: "Logo du L3C"
+    title: false
+    left:
+      - text: Le laboratoire
+        href: index.qmd
+      - text: Équipe
+        href: equipe.qmd
+      - text: Publications
+        href: publications.qmd
+      - text: Conférences
+        href: conferences.qmd
+      - text: Projets
+        href: projets.qmd
+      - text: Cours
+        href: cours.qmd
+
+  page-footer:
+    left: "© L3C · Laboratoire Cognition-Corps-Contexte · [UQTR](https://www.uqtr.ca)"
+    right: "[l3c@uqtr.ca](mailto:l3c@uqtr.ca)"
+
+format:
+  html:
+    theme:
+      - cosmo
+      - files/l3c.scss
+    toc: false
+    link-external-newwindow: true
+    include-in-header:
+      text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">

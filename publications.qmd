@@ -1,0 +1,10 @@
+---
+title: "Publications"
+subtitle: "Articles, livres et chapitres du laboratoire"
+include-after-body:
+  text: <script src="files/filtres.js"></script>
+---
+
+{{< include _generated/publications.md >}}
+
+<p class="legende"><sup>†</sup> Personne étudiante supervisée. <sup>*</sup> Premiers auteurs à contribution égale.</p>
