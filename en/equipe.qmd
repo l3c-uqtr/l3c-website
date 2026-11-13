@@ -1,0 +1,32 @@
+---
+title: "Team"
+subtitle: "The people behind the lab"
+include-after-body:
+  text: <script src="../files/tableaux.js"></script>
+---
+
+## Director
+
+::: {.direction}
+![](../files/profiles/GVallet_Photo.jpg){.direction-photo fig-alt="Photo of Guillaume T. Vallet"}
+
+::: {.direction-texte}
+### Guillaume T. Vallet, Ph.D.
+
+Guillaume Vallet is an assistant professor of neuropsychology at the Université du Québec à Trois-Rivières (UQTR). A psychologist specialized in neuropsychology, he completed a joint PhD between France (Université Lyon 2) and Canada (Université Laval), combining cognitive psychology and neuropsychology. He was a postdoctoral fellow at the Research Centre of the Institut universitaire de gériatrie de Montréal, where he is now a regular researcher.
+
+His work highlights the links between the body, the context and cognition. His main research topics are human memory and cognitive aging, in healthy adults and in people with cognitive impairments. He is also interested in cardiovascular adaptation as a marker of cognitive functioning and a lever for non-pharmacological intervention.
+
+[ORCID](https://orcid.org/0000-0002-9816-3267){.lien-profil} [Google Scholar](https://scholar.google.com/citations?user=gfKFo3MAAAAJ&hl=en){.lien-profil} [ResearchGate](https://www.researchgate.net/profile/Guillaume_Vallet){.lien-profil}
+:::
+:::
+
+## Current team
+
+{{< include ../_generated/equipe-en.md >}}
+
+## Former members
+
+{{< include ../_generated/alumni-en.md >}}
+
+<p class="legende">Program and project titles are shown in their original language.</p>

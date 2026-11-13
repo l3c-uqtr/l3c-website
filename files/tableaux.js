@@ -1,5 +1,6 @@
 // Tri par colonne et pagination des tableaux synthétiques (anciens membres, projets terminés).
 (function () {
+  const en = document.documentElement.lang === "en";
   document.querySelectorAll(".tableau-tri").forEach((table) => {
     const corps = table.tBodies[0];
     const taille = Number(table.dataset.lignes) || 10;
@@ -12,8 +13,8 @@
     const precedent = document.createElement("button");
     const suivant = document.createElement("button");
     const info = document.createElement("span");
-    precedent.textContent = "Précédent";
-    suivant.textContent = "Suivant";
+    precedent.textContent = en ? "Previous" : "Précédent";
+    suivant.textContent = en ? "Next" : "Suivant";
     [precedent, suivant].forEach((b) => {
       b.type = "button";
       b.className = "btn btn-sm btn-outline-primary";
@@ -28,7 +29,9 @@
       });
       const debut = page * taille + 1;
       const fin = Math.min((page + 1) * taille, lignes.length);
-      info.textContent = `Lignes ${debut} à ${fin} sur ${lignes.length}`;
+      info.textContent = en
+        ? `Rows ${debut} to ${fin} of ${lignes.length}`
+        : `Lignes ${debut} à ${fin} sur ${lignes.length}`;
       precedent.disabled = page === 0;
       suivant.disabled = page >= pages - 1;
       nav.hidden = pages <= 1;

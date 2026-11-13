@@ -1,0 +1,19 @@
+---
+title: "Courses"
+subtitle: "Teaching at the Université du Québec à Trois-Rivières"
+metadata-files: [../_generated/cours-meta.yml]
+---
+
+## Current courses
+
+{{< include ../_generated/cours-actuels-en.md >}}
+
+## Past courses
+
+{{< include ../_generated/cours-passes-en.md >}}
+
+## Previous teaching experience
+
+{{< include ../_generated/cours-experience-en.md >}}
+
+<p class="legende">Courses are taught in French.</p>

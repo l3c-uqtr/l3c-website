@@ -1,5 +1,6 @@
 // Filtres par texte, année, type et mots-clés des pages Publications et Conférences.
 (function () {
+  const en = document.documentElement.lang === "en";
   const sansAccent = (t) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
   document.querySelectorAll(".filtres").forEach((boite) => {
@@ -37,7 +38,9 @@
       cases.forEach((c) => c.closest(".puce").classList.toggle("actif", c.checked));
       compte.textContent =
         visibles === items.length
-          ? `${items.length} résultats`
+          ? `${items.length} ${en ? "results" : "résultats"}`
+          : en
+          ? `${visibles} of ${items.length} results`
           : `${visibles} résultat${visibles > 1 ? "s" : ""} sur ${items.length}`;
     }
 

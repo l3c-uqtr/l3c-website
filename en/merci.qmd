@@ -1,0 +1,9 @@
+---
+title: "Thank you!"
+subtitle: "Your request has been sent"
+search: false
+---
+
+We will contact you when a study may suit you. For any question, write to us at [l3c@uqtr.ca](mailto:l3c@uqtr.ca).
+
+[Back to home →](index.qmd){.lien-suite}

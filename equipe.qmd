@@ -21,7 +21,6 @@ Ses travaux mettent en avant les liens entre le corps, le contexte et la cogniti
 :::
 :::
 
-{{< include _generated/direction.md >}}
 
 ## Équipe actuelle
 

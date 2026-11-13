@@ -187,6 +187,75 @@ auteurs_html <- function(e) {
   paste(morceaux, collapse = ", ")
 }
 
+
+# --- Langues ----------------------------------------------------------------------
+# Chaque fragment est produit en français (_generated/x.md) et en anglais (_generated/x-en.md).
+# Les données elles-mêmes (titres, programmes, cours) restent dans leur langue d'origine.
+
+LANGUES <- c("fr", "en")
+
+TXT <- list(
+  fr = list(rechercher = "Rechercher", annee = "Année", toutes = "Toutes les années", reinit = "Réinitialiser",
+            type = "Type", mots = "Mots-clés", resume = "Résumé", lien = "Lien",
+            indice_pub = "Titre, auteur, revue…", indice_conf = "Titre, auteur, congrès, ville…",
+            depuis = "Depuis", codir = "Codirection", projet = "Projet", photo = "Photo de",
+            membres = "Membres", role = "Rôle", debut = "Début", fin = "Fin",
+            financement = "Financement", responsable = "Responsable", equipe = "Équipe", montant = "Montant",
+            aucun_cours = "Aucun cours pour le moment.", doctorat = "Doctorat", bacc = "Baccalauréat",
+            chiffres = c("publications", "présentations en congrès", "projets financés en cours",
+                         "personnes étudiantes et assistantes"),
+            sd = "s.d.", mois = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+                                  "août", "septembre", "octobre", "novembre", "décembre")),
+  en = list(rechercher = "Search", annee = "Year", toutes = "All years", reinit = "Reset",
+            type = "Type", mots = "Keywords", resume = "Abstract", lien = "Link",
+            indice_pub = "Title, author, journal…", indice_conf = "Title, author, conference, city…",
+            depuis = "Since", codir = "Co-supervisor", projet = "Project", photo = "Photo of",
+            membres = "Members", role = "Role", debut = "Start", fin = "End",
+            financement = "Funding", responsable = "Lead", equipe = "Team", montant = "Amount",
+            aucun_cours = "No courses at the moment.", doctorat = "Doctoral", bacc = "Undergraduate",
+            chiffres = c("publications", "conference presentations", "funded projects in progress",
+                         "students and assistants"),
+            sd = "n.d.", mois = c("January", "February", "March", "April", "May", "June", "July",
+                                  "August", "September", "October", "November", "December"))
+)
+
+TYPES_PUBLI <- list(peerjournal = c("Article", "Article"), book = c("Livre", "Book"),
+                    chapter = c("Chapitre de livre", "Book chapter"), proceeding = c("Actes", "Proceedings"))
+TYPES_CONF <- list(oral = c("Communication orale", "Oral presentation"),
+                   oralabst = c("Communication orale", "Oral presentation"),
+                   poster = c("Affiche", "Poster"), posterabst = c("Affiche", "Poster"),
+                   keynote = c("Conférence invitée", "Invited talk"), symposium = c("Symposium", "Symposium"))
+GROUPES <- list(PhD = c("Doctorat en recherche", "Research PhD"),
+                `R/I` = c("Doctorat recherche-intervention", "Research-intervention doctorate"),
+                DPsy = c("Doctorat clinique (D.Psy)", "Clinical doctorate (D.Psy)"),
+                Bacc = c("Baccalauréat", "Undergraduate"), Med = c("Médecine", "Medicine"),
+                Assistanat = c("Assistanat de recherche", "Research assistants"))
+
+idx <- function(lg) if (lg == "fr") 1L else 2L
+suffixe <- function(lg) if (lg == "fr") "" else "-en"
+# Les pages anglaises sont dans docs/en/ : les fichiers partagés sont un dossier plus haut
+racine <- function(lg) if (lg == "fr") "" else "../"
+
+ROLES_EN <- c("^Étudiant-e" = "Student", "^Assistante? de recherche" = "Research assistant",
+              "^PhD recherche" = "Research PhD",
+              "^Doctorat clinique en neuropsychologie" = "Clinical doctorate in neuropsychology",
+              "^Doctorat recherche/intervention en neuropsychologie" = "Research-intervention doctorate in neuropsychology",
+              "^Doctorat en sciences de la réadaptation" = "PhD in rehabilitation sciences",
+              "^Doctorat en psychologie cognitive" = "PhD in cognitive psychology",
+              "^Activité de recherche, 3e année de Bac\\." = "Undergraduate research project (3rd year)")
+
+traduire_role <- function(x, lg) {
+  if (lg == "fr") return(x)
+  for (motif in names(ROLES_EN)) x <- sub(motif, ROLES_EN[[motif]], x)
+  x
+}
+
+# --- Mots-clés et dates -------------------------------------------------------------
+
+# Dans sources.yml, chaque mot-clé vaut [français, anglais] ; une valeur seule sert aux deux langues
+libelle_mc <- function(v) if (length(v) >= 2) unlist(v[1:2]) else rep(unlist(v), 2)
+MC_EN <- list()
+
 mots_cles <- function(e) {
   bruts <- trimws(unlist(strsplit(c(e$field %||% "", e$spe %||% ""), "[,;]")))
   bruts <- bruts[nzchar(bruts)]
@@ -199,15 +268,20 @@ mots_cles <- function(e) {
       avertir("Mot-clé non traduit dans sources.yml : ", b)
       res <- c(res, b)
     } else if (!is.null(table_mc[[k]])) {
-      res <- c(res, table_mc[[k]])
+      lib <- libelle_mc(table_mc[[k]])
+      MC_EN[[lib[1]]] <<- lib[2]
+      res <- c(res, lib[1])
     }
   }
   unique(res)
 }
 
-MOIS_FR <- c("janvier", "février", "mars", "avril", "mai", "juin", "juillet",
-             "août", "septembre", "octobre", "novembre", "décembre")
-MOIS_EN <- c("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
+mots_langue <- function(mots, lg) {
+  if (lg == "fr" || length(mots) == 0) return(mots)
+  vapply(mots, function(m) MC_EN[[m]] %||% m, "", USE.NAMES = FALSE)
+}
+
+MOIS_COURTS <- c("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
 
 date_entree <- function(e) {
   d <- e$date %||% ""
@@ -223,18 +297,23 @@ date_entree <- function(e) {
     annee <- suppressWarnings(as.integer(regmatches(e$year %||% "", regexpr("[0-9]{4}", e$year %||% ""))))
     if (length(annee) == 0) annee <- NA_integer_
     txt <- tolower(e$month %||% "")
-    mois <- which(vapply(MOIS_EN, function(k) grepl(k, txt, fixed = TRUE), TRUE))[1]
+    mois <- which(vapply(MOIS_COURTS, function(k) grepl(k, txt, fixed = TRUE), TRUE))[1]
     jour <- NA_integer_
     jour2 <- NA_integer_
   }
-  texte <- if (is.na(annee)) "s.d." else if (is.na(mois)) as.character(annee) else {
-    j <- if (is.na(jour)) "" else if (is.na(jour2) || jour2 == jour) {
-      paste0(if (jour == 1L) "1er" else jour, " ")
-    } else paste0(jour, "–", jour2, " ")
-    paste0(j, MOIS_FR[mois], " ", annee)
-  }
-  list(annee = annee, texte = texte,
+  list(annee = annee, mois = mois, jour = jour, jour2 = jour2,
        tri = (annee %||% 0L) * 10000L + (mois %||% 0L) * 100L + (jour %||% 0L))
+}
+
+texte_date <- function(dt, lg) {
+  if (is.na(dt$annee)) return(TXT[[lg]]$sd)
+  if (is.na(dt$mois)) return(as.character(dt$annee))
+  nom_mois <- TXT[[lg]]$mois[dt$mois]
+  jours <- if (is.na(dt$jour)) "" else if (is.na(dt$jour2) || dt$jour2 == dt$jour) {
+    if (lg == "fr" && dt$jour == 1L) "1er" else as.character(dt$jour)
+  } else paste0(dt$jour, "–", dt$jour2)
+  if (!nzchar(jours)) return(paste(nom_mois, dt$annee))
+  if (lg == "fr") paste(jours, nom_mois, dt$annee) else paste0(nom_mois, " ", jours, ", ", dt$annee)
 }
 
 # --- Résumés (récupérés sur CrossRef, conservés dans un cache) --------------------
@@ -271,7 +350,8 @@ resume_doi <- function(doi) {
 
 # --- Écriture des fragments -----------------------------------------------------
 
-ecrire <- function(nom, html) {
+ecrire <- function(nom, html, lg = "fr") {
+  nom <- sub("\\.md$", paste0(suffixe(lg), ".md"), nom)
   con <- file(file.path(dir_gen, nom), open = "wb")
   on.exit(close(con))
   writeLines(enc2utf8(c("```{=html}", html, "```")), con, sep = "\n", useBytes = TRUE)
@@ -293,58 +373,61 @@ tableau_synthese <- function(colonnes, numeriques, lignes) {
     "<thead><tr>", entetes, "</tr></thead><tbody>", lignes, "</tbody></table></div>")
 }
 
-liste_filtrable <- function(items, id, indice) {
+carte_ref <- function(x, lg) {
+  t <- TXT[[lg]]
+  type <- x$type[idx(lg)]
+  mots <- mots_langue(x$mots, lg)
+  meta <- c(
+    sprintf("<span class=\"etq etq-type\">%s</span>", esc(type)),
+    if (length(mots)) sprintf("<span class=\"etq\">%s</span>", esc(mots)),
+    if (!is.na(x$lien)) sprintf("<a class=\"lien-doi\" href=\"%s\">%s</a>", esc(x$lien), x$lien_txt %||% t$lien)
+  )
+  lieu <- if (is.null(x$date)) x$lieu else esc(paste0(x$lieu, if (nzchar(x$lieu)) " · ", texte_date(x$date, lg)))
+  paste0(
+    sprintf("<article class=\"item\" data-annee=\"%d\" data-type=\"%s\" data-mots=\"%s\">",
+            x$annee, esc(type), esc(paste(mots, collapse = "|"))),
+    sprintf("<p class=\"item-titre\">%s</p>", esc(x$titre)),
+    sprintf("<p class=\"item-auteurs\">%s</p>", x$auteurs),
+    sprintf("<p class=\"item-lieu\">%s</p>", lieu),
+    sprintf("<div class=\"item-meta\">%s</div>", paste(meta, collapse = " ")),
+    if (!is.na(x$resume)) sprintf("<details class=\"item-resume\"><summary>%s</summary><p>%s</p></details>", t$resume, esc(x$resume)),
+    "</article>"
+  )
+}
+
+liste_filtrable <- function(items, id, indice, lg) {
+  t <- TXT[[lg]]
   annees <- sort(unique(vapply(items, function(x) x$annee, 0L)), decreasing = TRUE)
   options_annee <- paste(sprintf("<option value=\"%d\">%d</option>", annees, annees), collapse = "")
   filtres <- c(
     sprintf("<div class=\"filtres\" data-cible=\"#%s\">", id),
     "<div class=\"f-ligne\">",
-    sprintf("<input type=\"search\" class=\"f-texte form-control\" placeholder=\"%s\" aria-label=\"Rechercher\">", indice),
-    sprintf("<select class=\"f-annee form-select\" aria-label=\"Année\"><option value=\"\">Toutes les années</option>%s</select>", options_annee),
-    "<button type=\"button\" class=\"f-reset btn btn-outline-primary\">Réinitialiser</button>",
+    sprintf("<input type=\"search\" class=\"f-texte form-control\" placeholder=\"%s\" aria-label=\"%s\">", indice, t$rechercher),
+    sprintf("<select class=\"f-annee form-select\" aria-label=\"%s\"><option value=\"\">%s</option>%s</select>",
+            t$annee, t$toutes, options_annee),
+    sprintf("<button type=\"button\" class=\"f-reset btn btn-outline-primary\">%s</button>", t$reinit),
     "</div>",
-    puces_filtre("Type", "f-types", vapply(items, function(x) x$type, "")),
-    puces_filtre("Mots-clés", "f-mots", unlist(lapply(items, function(x) x$mots))),
+    puces_filtre(t$type, "f-types", vapply(items, function(x) x$type[idx(lg)], "")),
+    puces_filtre(t$mots, "f-mots", unlist(lapply(items, function(x) mots_langue(x$mots, lg)))),
     "<p class=\"f-compte\" aria-live=\"polite\"></p>",
     "</div>"
   )
   corps <- unlist(lapply(annees, function(a) {
     du <- Filter(function(x) x$annee == a, items)
     c(sprintf("<section class=\"annee\"><h2>%d</h2>", a),
-      vapply(du, function(x) x$html, ""), "</section>")
+      vapply(du, function(x) carte_ref(x, lg), ""), "</section>")
   }))
   c(filtres, sprintf("<div id=\"%s\" class=\"liste\">", id), corps, "</div>")
 }
 
-carte_ref <- function(x, lien = NA_character_, resume = NA_character_, date_txt = NULL) {
-  meta <- c(
-    sprintf("<span class=\"etq etq-type\">%s</span>", esc(x$type)),
-    sprintf("<span class=\"etq\">%s</span>", esc(x$mots)[seq_along(x$mots)]),
-    if (!is.na(lien)) sprintf("<a class=\"lien-doi\" href=\"%s\">%s</a>", esc(lien), x$lien_txt)
-  )
-  if (length(x$mots) == 0) meta <- meta[!grepl("^<span class=\"etq\"></span>$", meta)]
-  paste0(
-    sprintf("<article class=\"item\" data-annee=\"%d\" data-type=\"%s\" data-mots=\"%s\">",
-            x$annee, esc(x$type), esc(paste(x$mots, collapse = "|"))),
-    sprintf("<p class=\"item-titre\">%s</p>", esc(x$titre)),
-    sprintf("<p class=\"item-auteurs\">%s</p>", x$auteurs),
-    sprintf("<p class=\"item-lieu\">%s</p>", x$lieu),
-    sprintf("<div class=\"item-meta\">%s</div>", paste(meta, collapse = " ")),
-    if (!is.na(resume)) sprintf("<details class=\"item-resume\"><summary>Résumé</summary><p>%s</p></details>", esc(resume)),
-    "</article>"
-  )
-}
-
 # --- Publications -----------------------------------------------------------------
-
-TYPES_PUBLI <- c(peerjournal = "Article", book = "Livre", chapter = "Chapitre de livre", proceeding = "Actes")
 
 publis <- lapply(lire_bib(cfg$sources$publications), function(e) {
   k <- trimws(strsplit(e$keywords %||% "", "[,;]")[[1]])
-  type <- unname(TYPES_PUBLI[k[k %in% names(TYPES_PUBLI)][1]])
+  cle_type <- k[k %in% names(TYPES_PUBLI)][1]
   titre <- champ(e, "title")
   dt <- date_entree(e)
-  if (is.na(type) || is.na(titre) || is.na(dt$annee)) {
+  if (is.na(cle_type) || is.na(titre) || is.na(dt$annee)) {
     avertir("Publication ignorée (type, titre ou année manquant) : ", e$cle)
     return(NULL)
   }
@@ -358,26 +441,21 @@ publis <- lapply(lire_bib(cfg$sources$publications), function(e) {
   )
   doi <- champ(e, "doi")
   doi <- if (is.na(doi)) NA_character_ else sub("^https?://(dx\\.)?doi\\.org/", "", doi)
-  x <- list(annee = dt$annee, type = type, mots = mots_cles(e), titre = titre,
-            auteurs = auteurs_html(e), lieu = lieu, lien_txt = "DOI")
-  x$html <- carte_ref(x, if (!is.na(doi)) paste0("https://doi.org/", doi) else NA_character_, resume_doi(doi))
-  x
+  list(annee = dt$annee, type = TYPES_PUBLI[[cle_type]], mots = mots_cles(e), titre = titre,
+       auteurs = auteurs_html(e), lieu = lieu, lien_txt = "DOI",
+       lien = if (!is.na(doi)) paste0("https://doi.org/", doi) else NA_character_, resume = resume_doi(doi))
 })
 publis <- Filter(Negate(is.null), publis)
 publis <- publis[order(-vapply(publis, function(x) x$annee, 0L))]
 
 # --- Conférences --------------------------------------------------------------------
 
-TYPES_CONF <- c(oral = "Communication orale", oralabst = "Communication orale",
-                poster = "Affiche", posterabst = "Affiche",
-                keynote = "Conférence invitée", symposium = "Symposium")
-
 confs <- lapply(lire_bib(cfg$sources$conferences), function(e) {
   k <- tolower(trimws(strsplit(e$keywords %||% "", "[,;]")[[1]]))
-  type <- unname(TYPES_CONF[k[k %in% names(TYPES_CONF)][1]])
+  cle_type <- k[k %in% names(TYPES_CONF)][1]
   titre <- champ(e, "title")
   dt <- date_entree(e)
-  if (is.na(type) || is.na(titre) || is.na(dt$annee)) {
+  if (is.na(cle_type) || is.na(titre) || is.na(dt$annee)) {
     avertir("Conférence ignorée (type, titre ou année manquant) : ", e$cle)
     return(NULL)
   }
@@ -386,12 +464,10 @@ confs <- lapply(lire_bib(cfg$sources$conferences), function(e) {
   if (is.na(lieu)) lieu <- champ(e, "journal")
   if (is.na(lieu)) lieu <- champ(e, "organization")
   lieu <- if (is.na(lieu)) "" else sub("\\.$", "", sub("^\\[[^]]*\\]\\s*", "", lieu))
-  x <- list(annee = dt$annee, tri = dt$tri, type = type, mots = mots_cles(e), titre = titre,
-            auteurs = auteurs_html(e), lieu = esc(paste0(lieu, if (nzchar(lieu)) " · ", dt$texte)),
-            lien_txt = "Lien")
   lien <- champ(e, "url")
-  x$html <- carte_ref(x, if (!is.na(lien) && grepl("^https?://", lien)) lien else NA_character_)
-  x
+  list(annee = dt$annee, tri = dt$tri, date = dt, type = TYPES_CONF[[cle_type]], mots = mots_cles(e),
+       titre = titre, auteurs = auteurs_html(e), lieu = lieu, resume = NA_character_,
+       lien = if (!is.na(lien) && grepl("^https?://", lien)) lien else NA_character_)
 })
 confs <- Filter(Negate(is.null), confs)
 confs <- confs[order(-vapply(confs, function(x) x$tri, 0))]
@@ -458,13 +534,20 @@ dernier_lien <- function(d) {
 }
 membres <- do.call(rbind, lapply(split(personnes, personnes$id), dernier_lien))
 membres <- membres[order(cle_tri(membres$nom), cle_tri(membres$prenom)), ]
+actuels <- membres[membres$actif, ]
+anciens <- membres[!membres$actif, ]
+anciens <- anciens[order(-anciens$jusqu, cle_tri(anciens$nom)), ]
+
+inconnus <- setdiff(unique(actuels$niveau), names(GROUPES))
+if (length(inconnus)) avertir("Niveau de supervision non affiché sur la page Équipe : ", paste(inconnus, collapse = ", "))
 
 initiales_nom <- function(prenom, nom) toupper(paste0(substr(prenom, 1, 1), substr(nom, 1, 1)))
 
-carte_membre <- function(m) {
+carte_membre <- function(m, lg) {
+  t <- TXT[[lg]]
   photo <- if (!is.na(m$photo) && file.exists(file.path("files/profiles", m$photo))) {
-    sprintf("<img class=\"avatar\" src=\"files/profiles/%s\" alt=\"Photo de %s %s\">",
-            esc(m$photo), esc(m$prenom), esc(m$nom))
+    sprintf("<img class=\"avatar\" src=\"%sfiles/profiles/%s\" alt=\"%s %s %s\">",
+            racine(lg), esc(m$photo), t$photo, esc(m$prenom), esc(m$nom))
   } else {
     sprintf("<div class=\"avatar avatar-initiales\" aria-hidden=\"true\">%s</div>", esc(initiales_nom(m$prenom, m$nom)))
   }
@@ -472,55 +555,13 @@ carte_membre <- function(m) {
   paste0(
     "<article class=\"membre\">", photo, "<div class=\"membre-corps\">",
     sprintf("<h4>%s %s</h4>", esc(m$prenom), esc(m$nom)),
-    sprintf("<p class=\"membre-prog\">%s%s</p>", esc(m$prog), univ),
-    if (is.finite(m$depuis)) sprintf("<p class=\"membre-info\">Depuis %d</p>", m$depuis),
-    if (!is.na(m$codir)) sprintf("<p class=\"membre-info\">Codirection : %s</p>", esc(m$codir)),
-    if (!is.na(m$projet)) sprintf("<details><summary>Projet</summary><p>%s</p></details>", esc(propre(m$projet))),
+    sprintf("<p class=\"membre-prog\">%s%s</p>", esc(traduire_role(m$prog, lg)), univ),
+    if (is.finite(m$depuis)) sprintf("<p class=\"membre-info\">%s %d</p>", t$depuis, m$depuis),
+    if (!is.na(m$codir)) sprintf("<p class=\"membre-info\">%s : %s</p>", t$codir, esc(m$codir)),
+    if (!is.na(m$projet)) sprintf("<details><summary>%s</summary><p>%s</p></details>", t$projet, esc(propre(m$projet))),
     "</div></article>"
   )
 }
-
-GROUPES <- c(PhD = "Doctorat en recherche", `R/I` = "Doctorat recherche-intervention",
-             DPsy = "Doctorat clinique (D.Psy)", Bacc = "Baccalauréat", Med = "Médecine",
-             Assistanat = "Assistanat de recherche")
-
-actuels <- membres[membres$actif, ]
-html_equipe <- unlist(lapply(names(GROUPES), function(g) {
-  d <- actuels[actuels$niveau == g, ]
-  if (nrow(d) == 0) return(NULL)
-  c(sprintf("<h3>%s</h3>", GROUPES[[g]]), "<div class=\"grille-membres\">",
-    vapply(seq_len(nrow(d)), function(i) carte_membre(d[i, ]), ""), "</div>")
-}))
-inconnus <- setdiff(unique(actuels$niveau), names(GROUPES))
-if (length(inconnus)) avertir("Niveau de supervision non affiché sur la page Équipe : ", paste(inconnus, collapse = ", "))
-ecrire("equipe.md", html_equipe)
-
-anciens <- membres[!membres$actif, ]
-anciens <- anciens[order(-anciens$jusqu, cle_tri(anciens$nom)), ]
-ecrire("alumni.md", tableau_synthese(
-  c("Membres", "Rôle", "Début", "Fin"), c(FALSE, FALSE, TRUE, TRUE),
-  vapply(seq_len(nrow(anciens)), function(i) {
-    m <- anciens[i, ]
-    debut <- if (is.finite(m$depuis)) m$depuis else ""
-    sprintf("<tr><td>%s, %s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
-            esc(toupper(m$nom)), esc(m$prenom), esc(m$role), debut, m$jusqu)
-  }, "")
-))
-
-# Direction du laboratoire
-postes <- read_excel(cfg$sources$cvdata, sheet = "now", col_types = "text")
-formation <- read_excel(cfg$sources$cvdata, sheet = "education", col_types = "text")
-ligne_cv <- function(d) {
-  vapply(seq_len(nrow(d)), function(i) {
-    lieu <- d$with[i]
-    sprintf("<li><strong>%s</strong>%s <span class=\"cv-date\">%s</span></li>",
-            esc(d$what[i]), if (!is.na(lieu)) paste0(", ", esc(lieu)) else "", esc(d$when[i] %||% ""))
-  }, "")
-}
-ecrire("direction.md", c(
-  "<div class=\"cv-colonnes\"><div><h3>Postes actuels</h3><ul class=\"cv-liste\">", ligne_cv(postes), "</ul></div>",
-  "<div><h3>Formation et parcours</h3><ul class=\"cv-liste\">", ligne_cv(formation), "</ul></div></div>"
-))
 
 # --- Projets (subventions obtenues uniquement) -----------------------------------------
 
@@ -544,39 +585,29 @@ sub$annee_debut <- mapply(function(when, annee) {
   if (length(m)) m else annee
 }, ifelse(is.na(sub$when), "", sub$when), sub$year, USE.NAMES = FALSE)
 sub <- sub[order(-as.integer(sub$year), sub$type != "pi", cle_tri(sub$title)), ]
+termines <- sub[!sub$en_cours, ]
+termines <- termines[order(-(termines$fin %/% 100L), cle_tri(termines$title)), ]
 
-carte_projet <- function(p) {
-  resp <- propre(strsplit(p$resp %||% "", "\n", fixed = TRUE)[[1]][1])
+responsable <- function(p) propre(strsplit(p$resp %||% "", "\n", fixed = TRUE)[[1]][1])
+
+carte_projet <- function(p, lg) {
+  t <- TXT[[lg]]
+  resp <- responsable(p)
   montant <- if (isTRUE(cfg$afficher_montants) && !is.na(p$how)) {
-    sprintf("<p class=\"projet-info\">Montant : %s $</p>", format(as.numeric(p$how), big.mark = " ", scientific = FALSE))
+    sprintf("<p class=\"projet-info\">%s : %s $</p>", t$montant, format(as.numeric(p$how), big.mark = " ", scientific = FALSE))
   } else ""
   paste0(
     "<article class=\"projet\">",
     sprintf("<div class=\"projet-tete\"><span class=\"etq etq-type\">%s</span><span class=\"projet-date\">%s</span></div>",
             esc(p$code %||% ""), esc(p$when %||% p$year)),
     sprintf("<h3>%s</h3>", esc(propre(p$title))),
-    sprintf("<p class=\"projet-info\"><strong>Financement :</strong> %s%s</p>", esc(propre(p$orga)),
+    sprintf("<p class=\"projet-info\"><strong>%s :</strong> %s%s</p>", t$financement, esc(propre(p$orga)),
             if (!is.na(p$where)) paste0(" — ", esc(propre(p$where))) else ""),
-    if (!is.na(resp) && nzchar(resp)) sprintf("<p class=\"projet-info\"><strong>Responsable :</strong> %s</p>", esc(resp)),
-    if (!is.na(p$with)) sprintf("<p class=\"projet-info\"><strong>Équipe :</strong> %s</p>", esc(propre(p$with))),
+    if (!is.na(resp) && nzchar(resp)) sprintf("<p class=\"projet-info\"><strong>%s :</strong> %s</p>", t$responsable, esc(resp)),
+    if (!is.na(p$with)) sprintf("<p class=\"projet-info\"><strong>%s :</strong> %s</p>", t$equipe, esc(propre(p$with))),
     montant, "</article>"
   )
 }
-cartes_projets <- function(d) {
-  c("<div class=\"grille-projets\">", vapply(seq_len(nrow(d)), function(i) carte_projet(d[i, ]), ""), "</div>")
-}
-ecrire("projets-en-cours.md", cartes_projets(sub[sub$en_cours, ]))
-termines <- sub[!sub$en_cours, ]
-termines <- termines[order(-(termines$fin %/% 100L), cle_tri(termines$title)), ]
-ecrire("projets-termines.md", tableau_synthese(
-  c("Projet", "Financement", "Responsable", "Début", "Fin"), c(FALSE, FALSE, FALSE, TRUE, TRUE),
-  vapply(seq_len(nrow(termines)), function(i) {
-    p <- termines[i, ]
-    sprintf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%d</td></tr>",
-            esc(propre(p$title)), esc(propre(p$orga)),
-            esc(propre(strsplit(p$resp %||% "", "\n", fixed = TRUE)[[1]][1])), esc(p$annee_debut), p$fin %/% 100L)
-  }, "")
-))
 
 # --- Cours -----------------------------------------------------------------------------
 
@@ -585,63 +616,101 @@ cours <- cours[, c("sigle", "level", "name", "start", "end", "priority", "hours"
 cours <- cours[!is.na(cours$sigle), ]
 cours <- cours[order(as.integer(cours$priority)), ]
 cours$actif <- is.na(cours$end) | as.integer(cours$end) >= as.integer(format(Sys.Date(), "%Y"))
-cours$cycle <- ifelse(grepl("^doct", cours$level), "Doctorat", "Baccalauréat")
+cours$doctorat <- grepl("^doct", cours$level)
+passe <- read_excel(cfg$sources$cvdata, sheet = "past_teaching", col_types = "text")
 
-carte_cours <- function(k) {
+carte_cours <- function(k, lg) {
+  t <- TXT[[lg]]
   note <- regmatches(k$name, regexpr("\\[[^]]+\\]", k$name))
   nom <- trimws(gsub("\\[[^]]+\\]", "", k$name))
-  periode <- if (k$actif) paste0("Depuis ", k$start) else if (k$start == k$end) k$start else paste0(k$start, "–", k$end)
+  periode <- if (k$actif) paste(t$depuis, k$start) else if (k$start == k$end) k$start else paste0(k$start, "–", k$end)
   paste0(
     "<article class=\"cours\">",
     sprintf("<div class=\"cours-sigle\">%s</div><div class=\"cours-corps\"><h4>%s</h4>", esc(k$sigle), esc(nom)),
-    sprintf("<p>%s · %s h · %s%s</p></div></article>", k$cycle, esc(k$hours %||% "–"), periode,
-            if (length(note)) paste0(" · ", esc(gsub("[][]", "", note))) else "")
+    sprintf("<p>%s · %s h · %s%s</p></div></article>", if (k$doctorat) t$doctorat else t$bacc,
+            esc(k$hours %||% "–"), periode, if (length(note)) paste0(" · ", esc(gsub("[][]", "", note))) else "")
   )
 }
-bloc_cours <- function(d) {
-  if (nrow(d) == 0) return("<p>Aucun cours pour le moment.</p>")
-  c("<div class=\"liste-cours\">", vapply(seq_len(nrow(d)), function(i) carte_cours(d[i, ]), ""), "</div>")
+bloc_cours <- function(d, lg) {
+  if (nrow(d) == 0) return(sprintf("<p>%s</p>", TXT[[lg]]$aucun_cours))
+  c("<div class=\"liste-cours\">", vapply(seq_len(nrow(d)), function(i) carte_cours(d[i, ], lg), ""), "</div>")
 }
-ecrire("cours-actuels.md", bloc_cours(cours[cours$actif, ]))
-ecrire("cours-passes.md", bloc_cours(cours[!cours$actif, ]))
 
-passe <- read_excel(cfg$sources$cvdata, sheet = "past_teaching", col_types = "text")
-ecrire("cours-experience.md", c(
-  "<div class=\"cv-colonnes\">",
-  unlist(lapply(names(passe), function(n) {
-    v <- passe[[n]][!is.na(passe[[n]])]
-    c(sprintf("<div><h3>%s</h3><ul class=\"cv-liste\">", esc(n)), sprintf("<li>%s</li>", esc(v)), "</ul></div>")
-  })),
-  "</div>"
-))
+# La page Cours n'apparaît que si afficher_cours vaut true dans sources.yml (brouillon sinon)
+con <- file(file.path(dir_gen, "cours-meta.yml"), open = "wb")
+writeLines(sprintf("draft: %s", if (isTRUE(cfg$afficher_cours)) "false" else "true"), con)
+close(con)
 
-# --- Pages Publications et Conférences, et accueil ------------------------------------------
+# --- Génération dans chaque langue ---------------------------------------------------------
 
-ecrire("publications.md", liste_filtrable(publis, "liste-publications", "Titre, auteur, revue…"))
-ecrire("conferences.md", liste_filtrable(confs, "liste-conferences", "Titre, auteur, congrès, ville…"))
+for (lg in LANGUES) {
+  t <- TXT[[lg]]
 
-n_articles <- sum(vapply(publis, function(x) x$type == "Article", TRUE))
-chiffres <- list(
-  c(length(publis), "publications", "publications.qmd"),
-  c(length(confs), "présentations en congrès", "conferences.qmd"),
-  c(sum(sub$en_cours), "projets financés en cours", "projets.qmd"),
-  c(nrow(actuels), "personnes étudiantes et assistantes", "equipe.qmd")
-)
-ecrire("chiffres.md", c(
-  "<div class=\"chiffres\">",
-  vapply(chiffres, function(c) sprintf("<a class=\"chiffre\" href=\"%s\"><span class=\"chiffre-n\">%s</span><span>%s</span></a>",
-                                       sub("qmd$", "html", c[3]), c[1], c[2]), ""),
-  "</div>"
-))
-ecrire("recentes.md", c(
-  "<div class=\"liste\">",
-  vapply(publis[seq_len(min(4L, length(publis)))], function(x) gsub("<details.*</details>", "", x$html), ""),
-  "</div>"
-))
+  ecrire("publications.md", liste_filtrable(publis, "liste-publications", t$indice_pub, lg), lg)
+  ecrire("conferences.md", liste_filtrable(confs, "liste-conferences", t$indice_conf, lg), lg)
+
+  ecrire("equipe.md", unlist(lapply(names(GROUPES), function(g) {
+    d <- actuels[actuels$niveau == g, ]
+    if (nrow(d) == 0) return(NULL)
+    c(sprintf("<h3>%s</h3>", GROUPES[[g]][idx(lg)]), "<div class=\"grille-membres\">",
+      vapply(seq_len(nrow(d)), function(i) carte_membre(d[i, ], lg), ""), "</div>")
+  })), lg)
+
+  ecrire("alumni.md", tableau_synthese(
+    c(t$membres, t$role, t$debut, t$fin), c(FALSE, FALSE, TRUE, TRUE),
+    vapply(seq_len(nrow(anciens)), function(i) {
+      m <- anciens[i, ]
+      debut <- if (is.finite(m$depuis)) m$depuis else ""
+      sprintf("<tr><td>%s, %s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+              esc(toupper(m$nom)), esc(m$prenom), esc(traduire_role(m$role, lg)), debut, m$jusqu)
+    }, "")
+  ), lg)
+
+  en_cours <- sub[sub$en_cours, ]
+  ecrire("projets-en-cours.md", c("<div class=\"grille-projets\">",
+    vapply(seq_len(nrow(en_cours)), function(i) carte_projet(en_cours[i, ], lg), ""), "</div>"), lg)
+  ecrire("projets-termines.md", tableau_synthese(
+    c(t$projet, t$financement, t$responsable, t$debut, t$fin), c(FALSE, FALSE, FALSE, TRUE, TRUE),
+    vapply(seq_len(nrow(termines)), function(i) {
+      p <- termines[i, ]
+      sprintf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%d</td></tr>",
+              esc(propre(p$title)), esc(propre(p$orga)), esc(responsable(p)), esc(p$annee_debut), p$fin %/% 100L)
+    }, "")
+  ), lg)
+
+  ecrire("cours-actuels.md", bloc_cours(cours[cours$actif, ], lg), lg)
+  ecrire("cours-passes.md", bloc_cours(cours[!cours$actif, ], lg), lg)
+  ecrire("cours-experience.md", c(
+    "<div class=\"cv-colonnes\">",
+    unlist(lapply(names(passe), function(n) {
+      v <- passe[[n]][!is.na(passe[[n]])]
+      c(sprintf("<div><h3>%s</h3><ul class=\"cv-liste\">", esc(n)), sprintf("<li>%s</li>", esc(v)), "</ul></div>")
+    })),
+    "</div>"
+  ), lg)
+
+  valeurs <- c(length(publis), length(confs), sum(sub$en_cours), nrow(actuels))
+  pages <- c("publications.html", "conferences.html", "projets.html", "equipe.html")
+  ecrire("chiffres.md", c(
+    "<div class=\"chiffres\">",
+    sprintf("<a class=\"chiffre\" href=\"%s\"><span class=\"chiffre-n\">%d</span><span>%s</span></a>",
+            pages, valeurs, t$chiffres),
+    "</div>"
+  ), lg)
+  ecrire("recentes.md", c(
+    "<div class=\"liste\">",
+    vapply(publis[seq_len(min(4L, length(publis)))], function(x) gsub("<details.*</details>", "", carte_ref(x, lg)), ""),
+    "</div>"
+  ), lg)
+}
+
+unlink(file.path(dir_gen, "direction.md"))
 
 if (length(avertissements)) {
   message("--- À vérifier dans les données ---")
   message(paste0(" - ", unique(avertissements), collapse = "\n"))
 }
-message(sprintf("Site : %d publications (%d articles), %d conférences, %d projets, %d membres actuels, %d anciens, %d cours.",
-                length(publis), n_articles, length(confs), nrow(sub), nrow(actuels), nrow(anciens), nrow(cours)))
+n_articles <- sum(vapply(publis, function(x) x$type[1] == "Article", TRUE))
+message(sprintf("Site : %d publications (%d articles), %d conférences, %d projets, %d membres actuels, %d anciens, %d cours (page %s).",
+                length(publis), n_articles, length(confs), nrow(sub), nrow(actuels), nrow(anciens), nrow(cours),
+                if (isTRUE(cfg$afficher_cours)) "affichée" else "masquée"))

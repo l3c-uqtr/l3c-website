@@ -1,0 +1,16 @@
+---
+title: "Projects"
+subtitle: "Funded research projects"
+include-after-body:
+  text: <script src="../files/tableaux.js"></script>
+---
+
+## Ongoing projects
+
+{{< include ../_generated/projets-en-cours-en.md >}}
+
+## Completed projects
+
+{{< include ../_generated/projets-termines-en.md >}}
+
+<p class="legende">Project titles and funders are shown in their original language.</p>

@@ -371,3 +371,15 @@ th[aria-sort="descending"] .tri-bouton::after { content: " ↓"; color: $l3c-rou
   .cours { align-items: flex-start; flex-direction: column; gap: .2rem; }
   .cours-sigle { flex-basis: auto; }
 }
+
+/* --- Intranet --- */
+
+.formulaire-court {
+  max-width: 420px;
+  .btn { margin-top: .8rem; }
+}
+.erreur-acces {
+  margin: .5rem 0 0;
+  color: #A3341B;
+  font-weight: 600;
+}

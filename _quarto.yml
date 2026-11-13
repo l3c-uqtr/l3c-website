@@ -2,12 +2,17 @@ project:
   type: website
   output-dir: docs
   pre-render: scripts/build_data.R
-  post-render: scripts/verifier_confidentialite.R
+  # La version anglaise (dossier en/) est compilée juste après, dans docs/en
+  post-render:
+    - scripts/rendre_anglais.R
+    - scripts/verifier_confidentialite.R
   render:
     - "*.qmd"
     - "!README.md"
+    - "!en/"
   resources:
     - files/GVallet_CV.pdf
+    - files/*.js
 
 lang: fr
 
@@ -50,6 +55,12 @@ website:
         icon: file-earmark-arrow-down
         href: files/GVallet_CV.pdf
         aria-label: "Télécharger le CV de Guillaume T. Vallet"
+      - text: Intranet
+        icon: lock
+        href: intranet.qmd
+      - text: EN
+        href: en/index.html
+        aria-label: "English version"
 
   page-footer:
     left: "© L3C · Laboratoire Cognition-Corps-Contexte · [UQTR](https://www.uqtr.ca)"
@@ -67,3 +78,4 @@ format:
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+        <script src="files/langue.js" defer></script>

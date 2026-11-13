@@ -1,0 +1,69 @@
+---
+title: "Get involved"
+subtitle: "Take part in the lab's research"
+---
+
+Our research relies on the participation of people of all ages. If you would like to contribute to L3C projects, leave us your contact details: we will reach out when a study may suit you.
+
+Filling in this form does not commit you to anything. You will receive full information about a study before deciding to take part, and you can change your mind at any time. Most studies are conducted in French.
+
+```{=html}
+<form class="formulaire" name="participation" method="POST" action="/en/merci.html" data-netlify="true" netlify-honeypot="site-web">
+  <input type="hidden" name="form-name" value="participation">
+  <input type="hidden" name="langue" value="en">
+  <p class="champ-cache"><label>Do not fill in this field <input name="site-web" tabindex="-1" autocomplete="off"></label></p>
+
+  <div class="form-grille">
+    <div>
+      <label class="form-label" for="prenom">First name *</label>
+      <input class="form-control" id="prenom" name="prenom" autocomplete="given-name" required>
+    </div>
+    <div>
+      <label class="form-label" for="nom">Last name *</label>
+      <input class="form-control" id="nom" name="nom" autocomplete="family-name" required>
+    </div>
+    <div>
+      <label class="form-label" for="courriel">Email *</label>
+      <input class="form-control" id="courriel" type="email" name="courriel" autocomplete="email" required>
+    </div>
+    <div>
+      <label class="form-label" for="telephone">Phone (optional)</label>
+      <input class="form-control" id="telephone" type="tel" name="telephone" autocomplete="tel">
+    </div>
+    <div>
+      <label class="form-label" for="age">Age range *</label>
+      <select class="form-select" id="age" name="tranche-age" required>
+        <option value="">Choose…</option>
+        <option value="18 à 39 ans">18 to 39</option>
+        <option value="40 à 59 ans">40 to 59</option>
+        <option value="60 à 74 ans">60 to 74</option>
+        <option value="75 ans et plus">75 and over</option>
+      </select>
+    </div>
+    <div>
+      <label class="form-label" for="modalite">Preferred format *</label>
+      <select class="form-select" id="modalite" name="modalite" required>
+        <option value="">Choose…</option>
+        <option value="En personne à Trois-Rivières">In person in Trois-Rivières</option>
+        <option value="En ligne">Online</option>
+        <option value="En personne ou en ligne">In person or online</option>
+      </select>
+    </div>
+  </div>
+
+  <label class="form-label" for="message">Message (optional)</label>
+  <textarea class="form-control" id="message" name="message" rows="4" aria-describedby="message-aide"></textarea>
+  <p class="form-text" id="message-aide">Availability, questions… Please do not include any health information.</p>
+
+  <div class="form-check">
+    <input class="form-check-input" id="accord" type="checkbox" name="accord" value="oui" required>
+    <label class="form-check-label" for="accord">I agree that the L3C may keep this information to contact me about its studies. *</label>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Send</button>
+</form>
+```
+
+::: {.legende}
+Your information is used only to contact you about the lab's studies. It is transmitted through the site's hosting platform, Netlify, whose servers may be located outside Québec. To access, correct or delete it, write to [l3c@uqtr.ca](mailto:l3c@uqtr.ca).
+:::

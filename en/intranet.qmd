@@ -1,0 +1,22 @@
+---
+title: "Intranet"
+subtitle: "Restricted to lab members"
+search: false
+---
+
+```{=html}
+<form class="formulaire formulaire-court" method="POST" action="/intranet-acces">
+  <input type="hidden" name="langue" value="en">
+  <label class="form-label" for="mot-de-passe">Password</label>
+  <input class="form-control" id="mot-de-passe" type="password" name="mot-de-passe" autocomplete="current-password" required>
+  <p class="erreur-acces" hidden>Incorrect password.</p>
+  <button class="btn btn-primary" type="submit">Enter</button>
+</form>
+<script>
+  if (new URLSearchParams(location.search).has("erreur")) {
+    document.querySelector(".erreur-acces").hidden = false;
+  }
+</script>
+```
+
+Forgot the password? Write to [l3c@uqtr.ca](mailto:l3c@uqtr.ca).

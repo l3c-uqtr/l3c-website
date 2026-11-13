@@ -1,6 +1,7 @@
 ---
 title: "Cours"
 subtitle: "Enseignement à l'Université du Québec à Trois-Rivières"
+metadata-files: [_generated/cours-meta.yml]
 ---
 
 ## Cours actuels

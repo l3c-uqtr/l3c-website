@@ -1,0 +1,70 @@
+# English version, rendered into docs/en by scripts/rendre_anglais.R after the French site.
+# Shared files (styles, images, scripts, CV) live one level up, in ../files.
+project:
+  type: website
+  output-dir: ../docs/en
+
+lang: en
+
+website:
+  title: "L3C"
+  description: "Cognition-Body-Context Laboratory at the Université du Québec à Trois-Rivières, directed by Guillaume T. Vallet."
+  site-url: "https://l3c-uqtr.netlify.app/en"
+  favicon: ../files/images/favicon.png
+  open-graph: true
+  page-navigation: false
+  back-to-top-navigation: true
+  search:
+    location: navbar
+    type: textbox
+
+  navbar:
+    background: light
+    logo: ../files/images/logo-l3c.png
+    logo-alt: "L3C logo"
+    title: false
+    collapse-below: xl
+    left:
+      - text: The lab
+        href: index.qmd
+      - text: Team
+        href: equipe.qmd
+      - text: Publications
+        href: publications.qmd
+      - text: Conferences
+        href: conferences.qmd
+      - text: Projects
+        href: projets.qmd
+      - text: Courses
+        href: cours.qmd
+      - text: Get involved
+        href: participer.qmd
+    right:
+      - text: CV
+        icon: file-earmark-arrow-down
+        href: ../files/GVallet_CV.pdf
+        aria-label: "Download the CV of Guillaume T. Vallet (in French)"
+      - text: Intranet
+        icon: lock
+        href: intranet.qmd
+      - text: FR
+        href: ../index.html
+        aria-label: "Version française"
+
+  page-footer:
+    left: "© L3C · Cognition-Body-Context Laboratory · [UQTR](https://www.uqtr.ca)"
+    right: "[l3c@uqtr.ca](mailto:l3c@uqtr.ca)"
+
+format:
+  html:
+    theme:
+      - cosmo
+      - ../files/l3c.scss
+    toc: false
+    link-external-newwindow: true
+    include-in-header:
+      text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+        <script src="../files/langue.js" defer></script>

@@ -15,47 +15,50 @@ afficher_montants: false
 corrections_noms:
   "Jacob, Martin": "Martin, Jacob"
 
-# Traduction des champs field/spe des .bib en mots-clés affichés (la casse est ignorée).
+# Afficher la page Cours dans le site ? (false : la page est retirée du menu, de la recherche et du plan du site)
+afficher_cours: false
+
+# Traduction des champs field/spe des .bib en mots-clés affichés (la casse est ignorée) : [français, anglais].
 # Mettre ~ pour ne pas afficher un mot-clé. Un mot absent de cette liste est affiché tel quel.
 mots_cles:
-  Neuropsy: Neuropsychologie
-  Neuopsy: Neuropsychologie
-  Npsy: Neuropsychologie
-  Neuro: Neuropsychologie
-  Cognition: Psychologie cognitive
-  Cognitive: Psychologie cognitive
-  Cog: Psychologie cognitive
-  Fondamental: Psychologie cognitive
-  Vx: Vieillissement
-  Aging: Vieillissement
-  Memory: Mémoire
-  Embodied cognition: Cognition incarnée
-  Health: Santé
-  HRV: Variabilité cardiaque
-  Audio: Audiologie
-  Audiology: Audiologie
-  Perception: Perception
-  Assessment: Évaluation
-  Alzheimer: Maladie d'Alzheimer
-  Retraite: Retraite
-  Retirement: Retraite
-  Clinique: Clinique
-  Psychophysio: Psychophysiologie
-  Executive function: Fonctions exécutives
-  Ageism: Âgisme
-  dentaire: Santé bucco-dentaire
-  Oral health: Santé bucco-dentaire
-  Tinnitus: Acouphènes
-  Hyperacusis: Hyperacousie
-  Sedentarity: Sédentarité
-  Psychometrics: Psychométrie
-  MCI: Trouble cognitif léger
-  SCD: Déclin cognitif subjectif
-  Benzodiazepine: Benzodiazépines
-  Multitasking: Multitâche
-  Imagery: Imagerie mentale
-  Imagerie: Imagerie mentale
-  Emotion: Émotions
-  Decision making: Prise de décision
+  Neuropsy: [Neuropsychologie, Neuropsychology]
+  Neuopsy: [Neuropsychologie, Neuropsychology]
+  Npsy: [Neuropsychologie, Neuropsychology]
+  Neuro: [Neuropsychologie, Neuropsychology]
+  Cognition: [Psychologie cognitive, Cognitive psychology]
+  Cognitive: [Psychologie cognitive, Cognitive psychology]
+  Cog: [Psychologie cognitive, Cognitive psychology]
+  Fondamental: [Psychologie cognitive, Cognitive psychology]
+  Vx: [Vieillissement, Aging]
+  Aging: [Vieillissement, Aging]
+  Memory: [Mémoire, Memory]
+  Embodied cognition: [Cognition incarnée, Embodied cognition]
+  Health: [Santé, Health]
+  HRV: [Variabilité cardiaque, Heart rate variability]
+  Audio: [Audiologie, Audiology]
+  Audiology: [Audiologie, Audiology]
+  Perception: [Perception, Perception]
+  Assessment: [Évaluation, Assessment]
+  Alzheimer: [Maladie d'Alzheimer, Alzheimer's disease]
+  Retraite: [Retraite, Retirement]
+  Retirement: [Retraite, Retirement]
+  Clinique: [Clinique, Clinical]
+  Psychophysio: [Psychophysiologie, Psychophysiology]
+  Executive function: [Fonctions exécutives, Executive functions]
+  Ageism: [Âgisme, Ageism]
+  dentaire: [Santé bucco-dentaire, Oral health]
+  Oral health: [Santé bucco-dentaire, Oral health]
+  Tinnitus: [Acouphènes, Tinnitus]
+  Hyperacusis: [Hyperacousie, Hyperacusis]
+  Sedentarity: [Sédentarité, Sedentary behavior]
+  Psychometrics: [Psychométrie, Psychometrics]
+  MCI: [Trouble cognitif léger, Mild cognitive impairment]
+  SCD: [Déclin cognitif subjectif, Subjective cognitive decline]
+  Benzodiazepine: [Benzodiazépines, Benzodiazepines]
+  Multitasking: [Multitâche, Multitasking]
+  Imagery: [Imagerie mentale, Mental imagery]
+  Imagerie: [Imagerie mentale, Mental imagery]
+  Emotion: [Émotions, Emotions]
+  Decision making: [Prise de décision, Decision making]
   Psycho: ~
   Prog: ~

@@ -10,6 +10,7 @@ Remplir ce formulaire ne vous engage à rien. Vous recevrez toutes les informati
 ```{=html}
 <form class="formulaire" name="participation" method="POST" action="/merci.html" data-netlify="true" netlify-honeypot="site-web">
   <input type="hidden" name="form-name" value="participation">
+  <input type="hidden" name="langue" value="fr">
   <p class="champ-cache"><label>Ne pas remplir ce champ <input name="site-web" tabindex="-1" autocomplete="off"></label></p>
 
   <div class="form-grille">
